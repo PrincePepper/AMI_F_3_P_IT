@@ -10,6 +10,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 export default new Vuex.Store({
     state: {
+        user: [],
         notes: [],
         isAuthenticated: false,
         jwt: localStorage.getItem('token'),
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     },
     getters: {
         notes: state => state.notes,
+        user: state => state.user,
         isAuthenticated: state => state.isAuthenticated,
         jwt: state => state.jwt
     },
@@ -48,6 +50,10 @@ export default new Vuex.Store({
         },
         SET_NOTES(state, {notes}) {
             state.notes = notes
+        },
+
+        GET_INFO_USER(state, {user}) {
+            state.user = user
         },
     }
 })

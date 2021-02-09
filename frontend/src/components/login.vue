@@ -108,6 +108,7 @@
 <script>
 import {email, minLength, required} from 'vuelidate/lib/validators'
 import axios from "axios";
+import {TOKEN} from "@/api/common";
 
 export default {
   name: "login",
@@ -138,7 +139,7 @@ export default {
         email: this.login,
         password: this.password
       }
-      axios.post(this.$store.state.endpoints.obtainJWT, payload).then((response) => {
+      TOKEN.post('/obtain_token/', payload).then((response) => {
         this.$store.commit('updateToken', response.data.token)
         // get and set auth user
         const base = {
@@ -152,9 +153,7 @@ export default {
             withCredentials: true
           }
         }
-        // Even though the authentication returned a user object that can be
-        // decoded, we fetch it again. This way we aren't super dependant on
-        // JWT and can plug in something else.
+        //Делаем проверку что все ОК
         const axiosInstance = axios.create(base)
         axiosInstance({
           url: "/notes/",
@@ -166,8 +165,6 @@ export default {
         })
       }).catch((error) => {
         console.log(error);
-        console.debug(error);
-        console.dir(error);
       })
     }
   },

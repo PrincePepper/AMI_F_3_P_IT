@@ -17,3 +17,11 @@ class WriteOnly(permissions.BasePermission):
         WRITE_METHODS = ["POST", ]
 
         return request.method in WRITE_METHODS
+
+
+class ReadOnly(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        WRITE_METHODS = ["GET", ]
+
+        return request.method in WRITE_METHODS

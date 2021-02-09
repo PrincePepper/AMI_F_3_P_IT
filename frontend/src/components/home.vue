@@ -73,6 +73,11 @@
                     </div>
                   </a>
                 </nav>
+                <div class="mainstyle dsadasd">
+                  <div class="mainstyle gfdvsd" role="button" @click="DisconectUser">
+                    <div class="mainstyle_2 vdssfasd">Выйти</div>
+                  </div>
+                </div>
               </div>
               <div class="mainstyle kuyif" data-focusable="true">
                 <div class="mainstyle herbcs">
@@ -82,7 +87,7 @@
                   </div>
                 </div>
                 <div class="mainstyle gewrgcv">
-                  <span style="vertical-align: inherit;font-size: 21px; font-weight: 700">Семен</span>
+                  <span class="gwedczxaed">{{ user.username }}</span>
                 </div>
               </div>
             </div>
@@ -200,7 +205,7 @@
                                                     {{ convertDateToTimeAgo(post.created_at) }}
                                                   </div>
                                                   <div role="button" @click="deleteNote(post)">
-                                                    <div class="mainstyle_2 hrtfeg">
+                                                    <div v-if="user.id===post.user_id" class="mainstyle_2 hrtfeg">
                                                       X
                                                     </div>
                                                   </div>
@@ -290,6 +295,7 @@ export default {
   },
   computed: {
     ...mapGetters(['notes']),
+    ...mapGetters(['user']),
     resizeArea: function () {
       return Math.ceil(this.texts.length / 70)
     },
@@ -315,7 +321,7 @@ export default {
       const axiosInstance = axios.create(this.base)
       axiosInstance({url: `/notes/${note.id}/`, method: "delete", params: {}}).then(() => {
         this.$store.commit('REMOVE_NOTE', {notes: note})
-
+        this.beforeMount()
       })
     },
     likeOrdislikePost(note_id) {
@@ -323,14 +329,18 @@ export default {
       axiosInstance({url: `/notes/${note_id}/`, method: "get", params: {}}).then((note) => {
         if (note.data.is_fan) {
           axiosInstance({url: `/notes/${note_id}/unlike/`, method: "post", params: {}})
+
           for (let input in this.notes)
             if (this.notes[input].id === note_id)
               this.notes[input].total_likes = this.notes[input].total_likes - 1;
+
         } else {
           axiosInstance({url: `/notes/${note_id}/like/`, method: "post", params: {}})
+
           for (let input in this.notes)
             if (this.notes[input].id === note_id)
               this.notes[input].total_likes = this.notes[input].total_likes + 1;
+
         }
 
       })
@@ -338,8 +348,7 @@ export default {
     beforeMount() {
       const axiosInstance = axios.create(this.base)
       axiosInstance({url: "/notes/", method: "get", params: {}}).then((notes) => {
-        let a = notes.data.results;
-        this.$store.commit('SET_NOTES', {notes: a})
+        this.$store.commit('SET_NOTES', {notes: notes.data.results})
       })
     },
     fetchEventsList: function () {
@@ -348,17 +357,21 @@ export default {
     convertDateToTimeAgo(date) {
       return prettydate.format(new Date(date))
     },
-    // getUser() {
-    //   const axiosInstance = axios.create(this.base)
-    //   axiosInstance({url: "/current_user/", method: "get", params: {}}).then((user) => {
-    //     console.log(user.data.id)
-    //     return user.data.id;
-    //   })
-    // }
+    getUser() {
+      const axiosInstance = axios.create(this.base)
+      axiosInstance({url: "/current_user/", method: "get", params: {}}).then((user) => {
+        this.$store.commit('GET_INFO_USER', {user: user.data.results[0]})
+      })
+    },
+    DisconectUser() {
+      this.$store.commit('removeToken');
+      this.$router.push({name: 'main'})
+    }
   },
   created() {
+    this.getUser()
     this.fetchEventsList();
-    this.timer = setInterval(this.fetchEventsList, 3000)
+    this.timer = setInterval(this.fetchEventsList, 10000)
   },
   beforeDestroy() {
     clearInterval(this.timer)
@@ -388,8 +401,7 @@ export default {
 .sdasqwe {
   -webkit-box-flex: 1;
   flex-grow: 1;
-  -webkit-box-align: end;
-  align-items: flex-end;
+
   z-index: 3;
 
 }
@@ -499,6 +511,58 @@ export default {
   margin-right: 15px;
 }
 
+.dsadasd {
+  width: 90%;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.gfdvsd {
+  cursor: pointer;
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0);
+  padding-left: 30px;
+  padding-right: 30px;
+  -webkit-user-select: none;
+  user-select: none;
+  height: 0;
+  min-height: 49px;
+  min-width: calc(79px);
+  transition-duration: 0.2s;
+  transition-property: background-color, box-shadow;
+  outline-style: none;
+  box-shadow: rgb(0 0 0) 0 8px 28px;
+  background-color: rgb(29, 161, 242);
+}
+
+.gfdvsd:hover {
+  cursor: pointer;
+  background-color: rgb(26, 145, 218);
+}
+
+.vdssfasd {
+  display: flex;
+  max-width: 100%;
+  text-align: center;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0;
+  overflow-wrap: break-word;
+  line-height: 1.3125;
+  color: rgb(255, 255, 255);
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .kuyif {
   outline-style: none;
   align-items: center;
@@ -544,13 +608,28 @@ export default {
 .gewrgcv {
   margin-left: 24px;
   margin-right: 10px;
+  flex-shrink: 1;
+  max-width: 100%;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: horizontal;
+  flex-direction: row;
+}
+
+.gwedczxaed {
+  vertical-align: inherit;
+  font-size: 21px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hdbdrw {
 
   flex-shrink: 1;
   -webkit-box-flex: 1;
-  flex-grow: 1;
+  flex-grow: 6;
   -webkit-box-align: start;
   align-items: flex-start;
 }
@@ -558,7 +637,7 @@ export default {
 .nhrtnt {
   -webkit-box-flex: 1;
   flex-grow: 1;
-  width: 990px;
+  width: 100%;
   flex-shrink: 1;
 }
 

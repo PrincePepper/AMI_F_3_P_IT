@@ -37,8 +37,11 @@
               </div>
               <form class="mainstyle adbvdcfhr" novalidate @submit.prevent="autologin_user">
                 <div class="mainstyle" style="margin-left: 30px;margin-right: 30px; text-align: left;">
-                  <div v-if="regMessage" class="alert alert-success" role="alert">
+                  <div v-if="positiveRegMessage" class="alert alert-success" role="alert">
                     Вы успешно зарегистрировались!
+                  </div>
+                  <div v-if="negativeRegMessage" class="alert alert-danger" role="alert">
+                    Аккаунт такой уже есть!
                   </div>
                   <div class="mainstyle sdajhugty">Создайте учетную запись</div>
                   <div class="mainstyle dsfdscx">
@@ -136,18 +139,18 @@
                               @blur="$v.formReg.month.$touch()">
 
                         <option aria-disabled="true" class="r-yfoy6g" disabled="" value="">Месяц</option>
-                        <option class="r-yfoy6g" value="1">январь</option>
-                        <option class="r-yfoy6g" value="2">февраль</option>
-                        <option class="r-yfoy6g" value="3">март</option>
-                        <option class="r-yfoy6g" value="4">апрель</option>
-                        <option class="r-yfoy6g" value="5">май</option>
-                        <option class="r-yfoy6g" value="6">июнь</option>
-                        <option class="r-yfoy6g" value="7">июль</option>
-                        <option class="r-yfoy6g" value="8">август</option>
-                        <option class="r-yfoy6g" value="9">сентябрь</option>
-                        <option class="r-yfoy6g" value="10">октябрь</option>
-                        <option class="r-yfoy6g" value="11">ноябрь</option>
-                        <option class="r-yfoy6g" value="12">декабрь</option>
+                        <option class="r-yfoy6g" value=1>январь</option>
+                        <option class="r-yfoy6g" value=2>февраль</option>
+                        <option class="r-yfoy6g" value=3>март</option>
+                        <option class="r-yfoy6g" value=4>апрель</option>
+                        <option class="r-yfoy6g" value=5>май</option>
+                        <option class="r-yfoy6g" value=6>июнь</option>
+                        <option class="r-yfoy6g" value=7>июль</option>
+                        <option class="r-yfoy6g" value=8>август</option>
+                        <option class="r-yfoy6g" value=9>сентябрь</option>
+                        <option class="r-yfoy6g" value=10>октябрь</option>
+                        <option class="r-yfoy6g" value=11>ноябрь</option>
+                        <option class="r-yfoy6g" value=12>декабрь</option>
                       </select>
                       <svg class="mainstyle fdbera" viewBox="0 0 24 24">
                         <g>
@@ -171,37 +174,6 @@
                               @blur="$v.formReg.date.$touch()">
 
                         <option aria-disabled="true" class="r-yfoy6g" disabled="" value="">Дата</option>
-                        <!--                        <option class="r-yfoy6g" value="1">1</option>-->
-                        <!--                        <option class="r-yfoy6g" value="2">2</option>-->
-                        <!--                        <option class="r-yfoy6g" value="3">3</option>-->
-                        <!--                        <option class="r-yfoy6g" value="4">4</option>-->
-                        <!--                        <option class="r-yfoy6g" value="5">5</option>-->
-                        <!--                        <option class="r-yfoy6g" value="6">6</option>-->
-                        <!--                        <option class="r-yfoy6g" value="7">7</option>-->
-                        <!--                        <option class="r-yfoy6g" value="8">8</option>-->
-                        <!--                        <option class="r-yfoy6g" value="9">9</option>-->
-                        <!--                        <option class="r-yfoy6g" value="10">10</option>-->
-                        <!--                        <option class="r-yfoy6g" value="11">11</option>-->
-                        <!--                        <option class="r-yfoy6g" value="12">12</option>-->
-                        <!--                        <option class="r-yfoy6g" value="13">13</option>-->
-                        <!--                        <option class="r-yfoy6g" value="14">14</option>-->
-                        <!--                        <option class="r-yfoy6g" value="15">15</option>-->
-                        <!--                        <option class="r-yfoy6g" value="16">16</option>-->
-                        <!--                        <option class="r-yfoy6g" value="17">17</option>-->
-                        <!--                        <option class="r-yfoy6g" value="18">18</option>-->
-                        <!--                        <option class="r-yfoy6g" value="19">19</option>-->
-                        <!--                        <option class="r-yfoy6g" value="20">20</option>-->
-                        <!--                        <option class="r-yfoy6g" value="21">21</option>-->
-                        <!--                        <option class="r-yfoy6g" value="22">22</option>-->
-                        <!--                        <option class="r-yfoy6g" value="23">23</option>-->
-                        <!--                        <option class="r-yfoy6g" value="24">24</option>-->
-                        <!--                        <option class="r-yfoy6g" value="25">25</option>-->
-                        <!--                        <option class="r-yfoy6g" value="26">26</option>-->
-                        <!--                        <option class="r-yfoy6g" value="27">27</option>-->
-                        <!--                        <option class="r-yfoy6g" value="28">28</option>-->
-                        <!--                        <option class="r-yfoy6g" value="29">29</option>-->
-                        <!--                        <option class="r-yfoy6g" value="30">30</option>-->
-                        <!--                        <option class="r-yfoy6g" value="31">31</option>-->
                         <option v-for="(date, index) in dates"
                                 :key="index"
                                 :value="date"
@@ -314,6 +286,7 @@
 import {email, helpers, minLength, required, sameAs} from 'vuelidate/lib/validators'
 
 import axios from "axios";
+import {TOKEN} from "@/api/common";
 
 const alpha = helpers.regex('alpha', /^[a-zA-Zа-яёА-ЯЁ]*$/)
 // Custom regex for a phone number
@@ -321,7 +294,8 @@ const MOBILEREG = helpers.regex('alpha', /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?)
 export default {
   data() {
     return {
-      regMessage: false,
+      negativeRegMessage: false,
+      positiveRegMessage: false,
       dates: [],
       years: [],
       yearEnd: 2021,
@@ -362,7 +336,7 @@ export default {
       }
     },
     userRegister() {
-      console.group("Form second")
+      console.group("данные авторизации")
       console.log('Вы успешно зарегистрированны!')
       console.log('Ваше имя: ' + this.formReg.name)
       console.log('Email: ' + this.formReg.email)
@@ -371,19 +345,16 @@ export default {
       console.log('Пароль: ' + this.formReg.password)
       console.groupEnd()
     },
-    reset() {
-      // сбросить шаг и показать сообщение о регистрации
-      this.regMessage = true;
-      // сбросить валидацию
-      this.$v.$reset()
-      // убрать сообщение о регистрации
+    showMessageRegistration(event) {
+      if (event)
+        this.positiveRegMessage = true;
+      else
+        this.negativeRegMessage = true;
+
       setTimeout(() => {
-        this.regMessage = false
-      }, 1500)
-      // сбросить все поля
-      for (let input in this.formReg) {
-        this.formReg[input] = ''
-      }
+        this.negativeRegMessage = false
+        this.positiveRegMessage = false
+      }, 2500)
     },
     autologin_user() {
       const axiosInstance = axios.create({baseURL: this.$store.state.endpoints.baseUrl})
@@ -396,6 +367,7 @@ export default {
                   email: this.formReg.email,
                   phone_number: this.formReg.tel,
                   username: this.formReg.name,
+                  date: null,
                   password: this.formReg.password
                 }
           }).then(() => {
@@ -403,43 +375,19 @@ export default {
           email: this.formReg.email,
           password: this.formReg.password
         }
-        axios.post(this.$store.state.endpoints.obtainJWT, payload).then((response) => {
+
+        TOKEN.post('/obtain_token/', payload).then((response) => {
           this.$store.commit('updateToken', response.data.token)
-          // get and set auth user
-          const base = {
-            baseURL: this.$store.state.endpoints.baseUrl,
-            headers: {
-              // Set your Authorization to 'JWT', not Bearer!!!
-              Authorization: `JWT ${this.$store.state.jwt}`,
-              'Content-Type': 'application/json'
-            },
-            xhrFields: {
-              withCredentials: true
-            }
-          }
-          // Even though the authentication returned a user object that can be
-          // decoded, we fetch it again. This way we aren't super dependant on
-          // JWT and can plug in something else.
-          const axiosInstance = axios.create(base)
-          axiosInstance({
-            url: "/notes/",
-            method: "get",
-            params: {}
-          }).then((response) => {
-            this.$store.commit("setAuthUser", {authUser: response.data, isAuthenticated: true})
-            this.$router.push({name: 'home'})
-            this.userRegister()
-            this.reset()
-          })
+          this.$store.commit("setAuthUser", {authUser: response.data, isAuthenticated: true})
+          this.userRegister()
+          this.showMessageRegistration(true)
+          this.$router.push({name: 'home'})
         }).catch((error) => {
           console.log(error);
-          console.debug(error);
-          console.dir(error);
         })
       }).catch((error) => {
         console.log(error);
-        console.debug(error);
-        console.dir(error);
+        this.showMessageRegistration(false)
       })
     }
   },

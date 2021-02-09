@@ -21,6 +21,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class YourUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CurrentUserSerializer
+    permission_classes = (ReadOnly,)
 
     def get_queryset(self):
         user = self.request.user

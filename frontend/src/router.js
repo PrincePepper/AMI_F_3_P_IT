@@ -3,9 +3,9 @@ import login from "@/components/login";
 import registration from "@/components/registration";
 import home from "@/components/home";
 import authorization from "@/components/authorization";
-import axios from "axios";
+import {TOKEN} from "@/api/common";
 
-const a = localStorage.getItem('token');
+const token = localStorage.getItem('token');
 export default new VueRouter({
         routes: [
             {
@@ -13,10 +13,9 @@ export default new VueRouter({
                 name: 'main',
                 component: authorization,
                 beforeEnter: (to, from, next) => {
-                    axios.post('http://localhost:8000/api/v1/auth/verify_token/', {token: a}).then(() => {
+                    TOKEN.post('/verify_token/', {token: token}).then(() => {
                         window.location.href = "/home"
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         next()
                     })
                 }
@@ -26,13 +25,12 @@ export default new VueRouter({
                 name: 'home',
                 component: home,
                 beforeEnter: (to, from, next) => {
-                    // check for valid auth token
-                    axios.post('http://localhost:8000/api/v1/auth/verify_token/', {token: a}).then(() => {
+                    TOKEN.post('/verify_token/', {token: token}).then(() => {
                         next();
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         window.location.href = "/login";
                     })
+
                 }
             },
             {
@@ -45,12 +43,12 @@ export default new VueRouter({
                 name: 'login',
                 component: login,
                 beforeEnter: (to, from, next) => {
-                    axios.post('http://localhost:8000/api/v1/auth/verify_token/', {token: a}).then(() => {
+                    TOKEN.post('/verify_token/', {token: token}).then(() => {
                         window.location.href = "/home"
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         next();
                     })
+
                 }
             }
         ],

@@ -43,11 +43,11 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-    # id = models.UUIDField(primary_key=True)
     email = models.EmailField(_('email_address'), unique=True)
     username = models.CharField(max_length=63)
-    phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    phone_number = models.CharField(max_length=15, null=True)
+    date = models.DateField(null=True)
+    last_joined = models.DateField(auto_now=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()
@@ -66,7 +66,6 @@ class Post(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
     likes = GenericRelation(Like)
 
     @property
