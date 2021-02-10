@@ -10,6 +10,5 @@ router.register(r'notes', PostViewSet)
 
 router.register(r'current_user', YourUserViewSet)
 
-
 # URLs настраиваются автоматически роутером
 urlpatterns = router.urls
