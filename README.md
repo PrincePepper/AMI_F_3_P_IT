@@ -1,2 +1,2 @@
-# Ветка для загрузки проекта на сервер на Heroku
+# Ветка для загрузки проекта на сервер Heroku
 # https://ssereda-twister.herokuapp.com
