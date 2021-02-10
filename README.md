@@ -20,7 +20,7 @@ Email_address: admin@admin.admin
 # HEROKU
 Когда проект был готов, возникли проблемы, а как нам на один хост запушить 2 приложения(Vue js и Django работают на разных портах), мы воспользовались [__Webpack__](https://github.com/EugeneDae/django-vue-cli-webpack-demo), это один из способов которым можно так делать. Для этого нужно было в проект Django добавить пути на наши `static` файлы а на frontend сгенерировать наши static файлы c `templates` и многое другое, все действия описаны в курсе того чувака.
 
-#Сама ссылка на проект: https://ssereda-twister.herokuapp.com
+## Сама ссылка на проект: https://ssereda-twister.herokuapp.com
 
 ***The project was released for my University course***
 
